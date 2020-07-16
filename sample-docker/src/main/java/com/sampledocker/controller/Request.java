@@ -37,7 +37,7 @@ public class Request {
 		try {
 			CloseableHttpClient httpClient = getHttpClient();
 
-			HttpPost httpPost = new HttpPost(Constants.TOKEN_URL);
+			HttpPost httpPost = new HttpPost(Constants.HOST_URL + "login");
 			String reqBody = constructRequestBodyForTokenAPI();
 			httpPost.addHeader("Content-Type", "application/json");
 			log.info("Request Body : " + reqBody);
@@ -69,21 +69,28 @@ public class Request {
 
 	public void scanV1(String token) {
 		try {
+			File file = new File(getClass().getClassLoader().getResource("ex4.tf").getFile());
 			CloseableHttpClient httpClient = getHttpClient();
 
-			HttpPost httpPost = new HttpPost(Constants.SCAN_URL);
+			HttpPost httpPost = new HttpPost(Constants.HOST_URL + "iac/k8s/v1/scan");
+			httpPost.setHeader("x-redlock-auth", token);
+			httpPost.setHeader("terraform-version", "0.12");
+			httpPost.setHeader("terraform-012-parameters",
+					"[{\"root-module\":\"/scan/rich-value-types/\"},{\"root-module\":\"/scan/rich-value-types/network/\"}]");
 
 			HttpEntity multiPartEntity = constructRequestBodyForScanAPI();
 			httpPost.setEntity(multiPartEntity);
 
-			httpPost.addHeader("Content-Type", "multipart/form-data");
-			httpPost.addHeader("x-redlock-auth", token);
 			CloseableHttpResponse response = httpClient.execute(httpPost);
 
 			int responseStatus = response.getStatusLine().getStatusCode();
-			log.info("response status code " + responseStatus);
-			String responseBody = response.getEntity() == null ? "" : EntityUtils.toString(response.getEntity());
-			log.info("Response Body: " + responseBody);
+			if (responseStatus == 200) {
+				log.info("response status code " + responseStatus);
+				String responseBody = response.getEntity() == null ? "" : EntityUtils.toString(response.getEntity());
+				log.info("Response Body: " + responseBody);
+			} else {
+				log.debug("Error in execution");
+			}
 
 		} catch (Exception e) {
 
@@ -95,12 +102,12 @@ public class Request {
 		File file = new File(getClass().getClassLoader().getResource("ex4.tf").getFile());
 
 //		1
-		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		builder.addBinaryBody("templateFile", file);
-		builder.addTextBody("templateFile", "templateFile");
-		HttpEntity entity = builder.build();
-		return entity;
+//		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+//		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+//		builder.addBinaryBody("templateFile", file);
+//		builder.addTextBody("templateFile", "templateFile");
+//		HttpEntity entity = builder.build();
+//		return entity;
 
 // 		2
 //		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
@@ -131,6 +138,11 @@ public class Request {
 //		builder.addPart("data", data);
 //		HttpEntity entity = builder.build();
 //		return  entity;
+
+		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+		builder.addBinaryBody("templateFile", file, ContentType.TEXT_PLAIN, "ex4.tf");
+		HttpEntity entity = builder.build();
+		return entity;
 	}
 
 	private String constructRequestBodyForTokenAPI() {
