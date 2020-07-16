@@ -1,6 +1,9 @@
 package com.sampledocker.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 
 import org.apache.http.HttpEntity;
@@ -14,6 +17,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -86,32 +90,47 @@ public class Request {
 		}
 	}
 
-	private HttpEntity constructRequestBodyForScanAPI() {
+	private HttpEntity constructRequestBodyForScanAPI() throws FileNotFoundException, UnsupportedEncodingException {
 
 		File file = new File(getClass().getClassLoader().getResource("ex4.tf").getFile());
 
+//		1
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-//		builder.addBinaryBody
-//		  ("templateFile", file, ContentType.DEFAULT_BINARY, "ex4.tf");
-		builder.addBinaryBody("templateFile", file, ContentType.create("application/tf"), "ex4.tf");
-
+		builder.addBinaryBody("templateFile", file);
+		builder.addTextBody("templateFile", "templateFile");
 		HttpEntity entity = builder.build();
 		return entity;
 
-//
-//		File image = new File(getClass().getClassLoader().getResource("ex4.tf").getFile());
-//					
-//		FileBody fileBody = new FileBody(image);
-//		MultipartEntityBuilder builder = MultipartEntityBuilder.create()
-//		                         .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-//		                         .addBinaryBody("ex4.tf", image);
-//		                        
-//		HttpEntity multiPartEntity = builder.build();
-//        //Request Body
-//        JsonObject requestJson = new JsonObject();
-//        requestJson.addProperty("templateFile", multiPartEntity.toString());
-//        return requestJson.toString();
+// 		2
+//		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+//		builder.addBinaryBody("templateFile", new FileInputStream(file), ContentType.APPLICATION_OCTET_STREAM, file.getName());
+//		HttpEntity entity = builder.build();
+//		return entity;
+
+//		3
+//		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+//		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+//		FileBody fb = new FileBody(file);
+//		builder.addPart("templateFile", fb);
+//		HttpEntity entity = builder.build();
+//		return  entity;
+
+//		4
+//		FileBody data = new FileBody(file);
+//		String file_type = "tf";
+//		String description = "templateFile";
+//		String folder_id = "-1";
+//		String source = "MYCOMPUTER";
+//		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+//		builder.addPart("file_name", new StringBody(file.getName()));
+//		builder.addPart("folder_id", new StringBody(folder_id));
+//		builder.addPart("description", new StringBody(description));
+//		builder.addPart("source", new StringBody(source));
+//		builder.addPart("file_type", new StringBody(file_type));
+//		builder.addPart("data", data);
+//		HttpEntity entity = builder.build();
+//		return  entity;
 	}
 
 	private String constructRequestBodyForTokenAPI() {
