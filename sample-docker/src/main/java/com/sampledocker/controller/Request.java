@@ -67,7 +67,7 @@ public class Request {
 		return null;
 	}
 
-	public void scanV1(String token) {
+	public String scanV1(String token) {
 		try {
 			File file = new File(getClass().getClassLoader().getResource("ex4.tf").getFile());
 			CloseableHttpClient httpClient = getHttpClient();
@@ -88,6 +88,7 @@ public class Request {
 				log.info("response status code " + responseStatus);
 				String responseBody = response.getEntity() == null ? "" : EntityUtils.toString(response.getEntity());
 				log.info("Response Body: " + responseBody);
+				return "successfully executed scan api";
 			} else {
 				log.debug("Error in execution");
 			}
@@ -95,6 +96,8 @@ public class Request {
 		} catch (Exception e) {
 
 		}
+		
+		return "Error executed scan api";
 	}
 
 	private HttpEntity constructRequestBodyForScanAPI() throws FileNotFoundException, UnsupportedEncodingException {

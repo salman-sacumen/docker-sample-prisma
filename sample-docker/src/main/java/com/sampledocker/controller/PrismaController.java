@@ -26,10 +26,12 @@ public class PrismaController {
 	}
 
 	@GetMapping("/iac/tf/v1/scan") 
-	public void getScan() {
+	public String getScan() {
 		String token = getToken();
 		
-		ob.scanV1(token);
+		String message  = ob.scanV1(token);
+		
+		return message;
 	}
 
 }
