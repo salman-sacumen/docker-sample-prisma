@@ -1,0 +1,23 @@
+{
+    "key": "sample-docker",
+    "name": "sample docker App",
+    "description": "An example app for Bitbucket",
+    "lifecycle": {
+        "installed": "/installed",
+        "uninstalled": "/uninstalled"
+    },
+    "modules": {
+        "webhooks": [
+            {
+                "event": "*",
+                "url": "/webhook"
+            }
+        ]
+    },
+    "scopes": ["account", "repository"],
+    "contexts": ["account"],
+    "baseUrl": "http://www.google.com",
+    "authentication": {
+        "type": "none"
+    }
+}

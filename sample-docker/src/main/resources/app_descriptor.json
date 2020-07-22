@@ -1,0 +1,71 @@
+{
+    "key": "sample-ssv-app",
+    "name": "Sample App",
+    "description": "An example app for Bitbucket",
+    "vendor": {
+        "name": "Angry Nerds",
+        "url": "https://www.atlassian.com/angrynerds"
+    },
+    "baseUrl": "https://example.com",
+    "authentication": {
+        "type": "none"
+    },
+    "lifecycle": {
+        "installed": "/installed",
+        "uninstalled": "/uninstalled"
+    },
+    "modules": {
+        "webhooks": [
+            {
+                "event": "pullrequest:created",
+                "url": "/webhook"
+            },
+            {
+                "event": "pullrequest:updated",
+                "url": "/webhook"
+            },
+            {
+                "event": "pullrequest:fulfilled",
+                "url": "/webhook"
+            }
+        ],
+        "webItems": [
+            {
+                "url": "http://example.com?repoUuid={repository.uuid}",
+                "name": {
+                    "value": "Example Web Item"
+                },
+                "location": "org.bitbucket.repository.navigation",
+                "key": "example-web-item",
+                "params": {
+                    "auiIcon": "aui-iconfont-link"
+                }
+            }
+        ],
+        "repoPages": [
+            {
+                "url": "/connect-example?repoUuid={repository.uuid}",
+                "name": {
+                    "value": "Example Page"
+                },
+                "location": "org.bitbucket.repository.navigation",
+                "key": "example-repo-page",
+                "params": {
+                    "auiIcon": "aui-iconfont-doc"
+                }
+            }
+        ],
+        "webPanels": [
+            {
+                "url": "/connect-example?repoUuid={repository.uuid}",
+                "name": {
+                    "value": "Example Web Panel"
+                },
+                "location": "org.bitbucket.repository.overview.informationPanel",
+                "key": "example-web-panel"
+            }
+        ]
+    },
+    "scopes": ["account", "repository", "pullrequest"],
+    "contexts": ["account"]
+}
