@@ -1,15 +1,8 @@
 package com.sampledocker.controller;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 
 @RestController
 public class PaloAltoController {
@@ -32,6 +24,11 @@ public class PaloAltoController {
 		return getJsonResponse();
 	}
 
+	@GetMapping("/cloud")
+	public void display() {
+		log.info("hit api");
+	}
+	
 	public ResponseEntity<String> getJsonResponse() {
 	    HttpHeaders responseHeaders = new HttpHeaders();
 	    responseHeaders.set("Content-Type","application/json");

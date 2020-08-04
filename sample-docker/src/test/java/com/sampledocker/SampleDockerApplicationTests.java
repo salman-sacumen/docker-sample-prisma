@@ -30,4 +30,5 @@ class SampleDockerApplicationTests {
 		ResponseEntity<String> aa = object.getJsonResponse();
 		
 	}
+
 }

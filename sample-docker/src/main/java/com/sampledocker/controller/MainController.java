@@ -8,20 +8,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MainController {
-	
-	static final Logger log=LoggerFactory.getLogger("MainController.class");
-	
-	@GetMapping("/index") 
+
+	static final Logger log = LoggerFactory.getLogger("MainController.class");
+
+	@GetMapping("/index")
 	public String index() {
 		log.info("index api triggered ");
 		return "Hello World";
 	}
-	
+
 	@GetMapping(path = "/index/{name}")
 	public String indexValue(@PathVariable("name") String name) {
 		log.info("name api triggered ");
-		return "Hello "+name;
+		return "Hello " + name;
 	}
-
 
 }
